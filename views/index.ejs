@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CozyCup</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <h1>CozyCup</h1>
+    <nav>
+      <% if (user) { %>
+        <span>Welcome, <%= user.name %></span>
+        <a href="/logout">Logout</a>
+      <% } else { %>
+        <a href="/auth/google">Login with Google</a>
+      <% } %>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>Welcome to CozyCup</h2>
+      <p>Neutral-themed online shop for cozy cups and custom designs.</p>
+      <p><a href="/custom">Make a custom order</a></p>
+      <p><a href="/cart" id="open-cart">My Cart / Orders</a></p>
+    </section>
+  </main>
+
+  <!-- AI widget trigger -->
+  <div id="ai-widget-button" onclick="toggleWidget()">
+    <svg width="22" height="22" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="white" stroke="#666"/>
+    </svg>
+  </div>
+
+  <!-- AI panel -->
+
+
+  <div id="ai-widget-panel" class="hidden">
+    <div class="ai-header">
+      <strong>Cozy Cup AI</strong>
+      <button onclick="toggleWidget()" class="close-btn">✕</button>
+    </div>
+
+    <div class="ai-body">
+      <textarea id="ai-prompt" placeholder="Ask Cozy Ai..."></textarea>
+      <button id="ai-send" onclick="sendPrompt()">Send</button>
+
+      <pre id="ai-response"></pre>
+    </div>
+  </div>
+
+<script>
+/* Toggle AI widget */
+function toggleWidget() {
+  document.getElementById("ai-widget-panel").classList.toggle("hidden");
+}
+
+/* Typing animation */
+function typeWriterEffect(element, text, speed = 20) {
+  element.innerText = "";
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      element.innerText += text.charAt(i);
+      i++;
+      element.scrollTop = element.scrollHeight;
+      setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+/* SEND the prompt */
+async function sendPrompt() {
+  const prompt = document.getElementById("ai-prompt").value;
+  const resBox = document.getElementById("ai-response");
+
+  resBox.innerText = "Thinking...";
+
+  try {
+    // ⬇⬇⬇ NO JSON — USE PLAIN TEXT ⬇⬇⬇
+    const res = await fetch("/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    const text = await res.text();  // <-- backend returns raw string
+
+    // Typing animation
+    typeWriterEffect(resBox, text);
+
+  } catch (e) {
+    resBox.innerText = "Error contacting Gemini.";
+  }
+}
+</script>
+
+</body>
+</html>

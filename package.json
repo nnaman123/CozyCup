@@ -1,0 +1,23 @@
+{
+  "name": "cozycups",
+  "version": "0.1.0",
+  "description": "CozyCup school project - neutral themed shop with custom orders and admin panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "connect-mongo": "^5.0.0",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.3.1",
+    "nodemailer": "^6.9.4",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.1.4"
+  }
+}

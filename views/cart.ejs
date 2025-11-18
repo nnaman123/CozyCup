@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>My Orders - CozyCup</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .order-card {
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .order-card h3 {
+      margin: 0 0 6px 0;
+      font-size: 16px;
+      color: #2b6cb0;
+    }
+    .order-card p {
+      margin: 2px 0;
+      font-size: 14px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f6f5f3;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>CozyCup</h1>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>My Approved Orders</h2>
+    <div id="orders-list">
+      <p>Loading orders...</p>
+    </div>
+  </main>
+
+  <script>
+    async function loadOrders() {
+      try {
+        const res = await fetch('/api/my-orders');
+        if (!res.ok) throw new Error('Failed to fetch orders');
+
+        const orders = await res.json();
+
+        const container = document.getElementById('orders-list');
+        const approvedOrders = orders.filter(o => o.status === 'approved');
+
+        if (approvedOrders.length === 0) {
+          container.innerHTML = "<p>No approved orders yet.</p>";
+          return;
+        }
+
+        container.innerHTML = approvedOrders.map(o => `
+          <div class="order-card">
+            <h3>${o.title}</h3>
+            <p><strong>Description:</strong> ${o.description || 'N/A'}</p>
+            <p><strong>Price:</strong> ${o.price ? '₹'+o.price : 'Not set'}</p>
+            <p><strong>Comments:</strong> ${o.comments || 'No comments'}</p>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        document.getElementById('orders-list').innerHTML = "<p>Error loading orders.</p>";
+        console.error(err);
+      }
+    }
+
+    loadOrders();
+  </script>
+</body>
+</html>
