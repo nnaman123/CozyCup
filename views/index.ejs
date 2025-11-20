@@ -5,6 +5,16 @@
   <title>CozyCup</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
+<script>
+    const video = document.getElementById("introVideo");
+    const container = document.getElementById("introVideoContainer");
+    const content = document.getElementById("content");
+
+    video.onended = () => {
+        container.style.display = "none";     // Hide video overlay
+        content.style.display = "block";      // Show your website
+    };
+</script>
 
 <body>
   <header class="topbar">
