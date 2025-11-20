@@ -5,14 +5,19 @@
   <title>CozyCup</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
- 
 
 <body>
+
+<!-- INTRO VIDEO -->
 <div id="introVideoContainer">
     <video id="introVideo" autoplay muted playsinline>
         <source src="intro.mp4" type="video/mp4">
     </video>
 </div>
+
+<!-- WRAPPER (hidden until video ends) -->
+<div id="content-wrapper" style="display: none;">
+
   <header class="topbar">
     <h1>CozyCup</h1>
     <nav>
@@ -43,8 +48,6 @@
   </div>
 
   <!-- AI panel -->
-
-
   <div id="ai-widget-panel" class="hidden">
     <div class="ai-header">
       <strong>Cozy Cup AI</strong>
@@ -54,13 +57,14 @@
     <div class="ai-body">
       <textarea id="ai-prompt" placeholder="Ask Cozy Ai..."></textarea>
       <button id="ai-send" onclick="sendPrompt()">Send</button>
-
       <pre id="ai-response"></pre>
     </div>
   </div>
 
-<script>
+</div> <!-- END content-wrapper -->
 
+<script>
+/* INTRO VIDEO CONTROL */
 const introVideo = document.getElementById("introVideo");
 const introContainer = document.getElementById("introVideoContainer");
 const content = document.getElementById("content-wrapper");
@@ -69,7 +73,6 @@ introVideo.onended = () => {
   introContainer.style.display = "none";
   content.style.display = "block";
 };
-
 
 /* Toggle AI widget */
 function toggleWidget() {
@@ -99,16 +102,13 @@ async function sendPrompt() {
   resBox.innerText = "Thinking...";
 
   try {
-    // ⬇⬇⬇ NO JSON — USE PLAIN TEXT ⬇⬇⬇
     const res = await fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt })
     });
 
-    const text = await res.text();  // <-- backend returns raw string
-
-    // Typing animation
+    const text = await res.text();
     typeWriterEffect(resBox, text);
 
   } catch (e) {
@@ -116,6 +116,6 @@ async function sendPrompt() {
   }
 }
 </script>
-</div>
+
 </body>
 </html>
