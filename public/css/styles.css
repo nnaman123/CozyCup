@@ -58,4 +58,6 @@ pre#ai-response {
   white-space:pre-wrap;
   font-size:13px;
 }
-
+    body {
+        background-color: blue;
+    }
