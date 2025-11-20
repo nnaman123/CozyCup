@@ -5,18 +5,14 @@
   <title>CozyCup</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
-<script>
-    const video = document.getElementById("introVideo");
-    const container = document.getElementById("introVideoContainer");
-    const content = document.getElementById("content");
-
-    video.onended = () => {
-        container.style.display = "none";     // Hide video overlay
-        content.style.display = "block";      // Show your website
-    };
-</script>
+ 
 
 <body>
+<div id="introVideoContainer">
+    <video id="introVideo" autoplay muted playsinline>
+        <source src="intro.mp4" type="video/mp4">
+    </video>
+</div>
   <header class="topbar">
     <h1>CozyCup</h1>
     <nav>
@@ -64,6 +60,17 @@
   </div>
 
 <script>
+
+const introVideo = document.getElementById("introVideo");
+const introContainer = document.getElementById("introVideoContainer");
+const content = document.getElementById("content-wrapper");
+
+introVideo.onended = () => {
+  introContainer.style.display = "none";
+  content.style.display = "block";
+};
+
+
 /* Toggle AI widget */
 function toggleWidget() {
   document.getElementById("ai-widget-panel").classList.toggle("hidden");
@@ -109,6 +116,6 @@ async function sendPrompt() {
   }
 }
 </script>
-
+</div>
 </body>
 </html>
